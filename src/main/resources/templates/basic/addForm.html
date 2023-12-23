@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+        max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>상품 등록 폼</h2>
+    </div>
+    <h4 class="mb-3">상품 입력</h4>
+    <form action th:object="${itemForm}" method="post">
+
+        <div>
+            <label for="name">상품명</label>
+            <input id="name" type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요">
+        </div>
+        <div>
+            <label for="price">가격</label>
+            <input id="price" type="text" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요">
+        </div>
+        <div>
+            <label for="quantity">수량</label>
+            <input id="quantity" type="text" th:field="*{quantity}" class="form-control" placeholder="이름을 입력하세요">
+        </div>
+        <div class="form-check form-check-inline">
+            <label for="open" class="form-check-label">판매 오픈</label>
+            <input id="open" type="checkbox" th:field="*{open}" class="form-check-input">
+        </div>
+        <div>
+            <div>등록지역</div>
+            <div th:each="region : ${regions}" class="form-check form-check-inline">
+                <input type="checkbox" th:field="*{selectedRegions}" th:value="${region.key}" class="form-check-input">
+                <label th:for="${#ids.prev('selectedRegions')}" th:text="${region.value}" class="form-check-label">서울</label>
+            </div>
+        </div>
+        <div>
+            <div>상품 종류</div>
+            <div th:each="type : ${types}" class="form-check form-check-inline">
+                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
+                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">서울</label>
+            </div>
+            <!--enum타입의 name()을 쓰면 enum타입의 문자열로 그대로 반환해준다-->
+        </div>
+        <div>
+            <div>배송 방식</div>
+            <select th:field="*{deliveryCode}" class="form-select">
+                <option value="">--배송 방식 선택--</option>
+                <option th:each="deliveryCode : ${deliveryCodes}" th:value="${deliveryCode.code}" th:text="${deliveryCode.displayName}"></option>
+            </select>
+        </div>
+        <!--select의 name이 key값으로,option의 value값이 key-value형태의 쿼리 파라미터로 전송된다. -->
+        <hr class="my-4">
+
+        <!--th:field="*{open}"를 쓰면 자동으로 <input type="hidden" name="_open" value="on"/>를 추가해준다.-->
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">상품 등록
+                </button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        th:onclick="|location.href='@{/basic/items}'|"
+                        onclick="location.href='items.html'" type="button">취소
+                </button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
